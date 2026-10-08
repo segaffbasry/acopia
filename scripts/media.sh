@@ -13,7 +13,8 @@ for f in 2025/07/Pains-Process-Improvement.webp 2025/07/Pains-Cost-Control.webp 
   2026/03/RCMI-Blog-Feature-Image.webp 2025/10/Single-Source-Procurement-webp.webp \
   2025/04/5-GNFR-Strategies-for-Better-Stock-Visibility.webp 2025/04/Your-guide-to-controlling-retail-procurement-costs.webp \
   2025/08/Acopia-Group.webp \
-  2026/08/Busy-Store-webp.webp 2026/06/Shop-front-1536x1359.webp; do
+  2025/07/Re-Thinking-Retail-Bag-scaled.webp 2026/06/Shop-front-1536x1359.webp \
+  2026/09/Out-of-stock-webp.webp 2026/07/Retail-Hidden-Costs.webp 2026/07/Sustainable-Shopping-Bags.webp; do
   get "$f" "$D/$(basename "$f")"
 done
 # "Trusted by Leading Retailers" logo strip, in live homepage order

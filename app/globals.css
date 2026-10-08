@@ -107,8 +107,13 @@ html:not(.js) .preloader, html[data-intro="done"] .preloader:not(.is-exiting) { 
 html.js .preloader-logo path { opacity: 0; } /* GSAP takes over; no flash of the finished mark before the build */
 
 /* ---------- Header ---------- */
-.header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: calc(var(--gutter) + 18px) calc(var(--gutter) + clamp(16px, 2.6vw, 34px)); display: flex; align-items: center; gap: 32px; color: var(--navy); transition: color var(--dur-hover) var(--ease-kina), transform .5s var(--ease-out); }
+.header { position: fixed; top: 0; left: 0; right: 0; z-index: 50; padding: calc(var(--gutter) + 18px) calc(var(--gutter) + clamp(16px, 2.6vw, 34px)); display: flex; align-items: center; gap: 32px; color: var(--navy); transition: color var(--dur-hover) var(--ease-kina), transform .5s var(--ease-out), padding .35s var(--ease-kina); }
 .header[data-tone="light"] { color: var(--white); }
+/* Solid floating bar once the header leaves the hero: white on light ground, navy on navy panels. No blur. */
+.header::before { content: ""; position: absolute; z-index: -1; inset: var(--gutter) var(--gutter) 0; border-radius: var(--r-card); background: var(--white); box-shadow: 0 10px 30px -18px rgb(0 42 58 / .45), 0 0 0 1px var(--ink-12); opacity: 0; transition: opacity .35s var(--ease-kina), background-color .35s var(--ease-kina); }
+.header[data-tone="light"]::before { background: var(--navy); box-shadow: 0 0 0 1px var(--white-12); }
+.header.is-solid { padding-top: calc(var(--gutter) + 14px); padding-bottom: 14px; }
+.header.is-solid::before { opacity: 1; }
 .header.is-hidden { transform: translateY(-110%); }
 .header-logo { display: block; width: 118px; color: inherit; }
 .header-logo svg { display: block; width: 100%; height: auto; }
@@ -154,19 +159,16 @@ html.js:not([data-intro="done"]) .header-nav, html.js:not([data-intro="done"]) .
 .hero { padding: var(--gutter) var(--gutter) 0; }
 .hero-card { position: relative; height: calc(100svh - var(--gutter)); min-height: 600px; max-height: 940px; border-radius: var(--r-panel); overflow: hidden; color: var(--white); background: var(--navy); }
 .hero-media { position: absolute; inset: 0; }
-.hero-media img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 40%; filter: saturate(.92); }
-.hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 42 58 / .55) 0%, rgb(0 42 58 / 0) 26%, rgb(0 42 58 / 0) 42%, rgb(0 42 58 / .82) 100%); }
-.hero-inner { position: absolute; inset: auto 0 0 0; padding: 0 clamp(20px, 3vw, 44px) clamp(24px, 3.4vw, 44px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(260px, 340px); align-items: end; gap: 28px 48px; }
+.hero-media img { position: absolute; left: 0; top: -11%; width: 100%; height: 112%; object-fit: cover; object-position: 50% 35%; } /* extra height for the scroll drift; Acopia photo in full colour */
+.hero-media::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgb(0 42 58 / .5) 0%, rgb(0 42 58 / 0) 22%, rgb(0 42 58 / 0) 46%, rgb(0 42 58 / .55) 72%, rgb(0 42 58 / .86) 100%), linear-gradient(90deg, rgb(0 42 58 / .45) 0%, rgb(0 42 58 / 0) 60%); }
+.hero-inner { position: absolute; inset: auto 0 0 0; padding: 0 clamp(20px, 3vw, 44px) clamp(24px, 3.4vw, 44px); display: grid; gap: 26px; justify-items: start; } /* left column, so the Acopia tote on the right stays clear */
 .hero h1 .line { display: block; overflow: hidden; padding-bottom: .06em; margin-bottom: -.06em; }
 .hero h1 .line > span { display: block; }
 .hero h1 .line + .line { color: var(--green); }
 @media (min-width: 861px) { .hero h1 .line { white-space: nowrap; } }
-.hero-side { display: grid; gap: 22px; justify-items: start; }
-.hero-side .lead { font-size: 17px; color: var(--white); max-width: 36ch; }
+.hero-side { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 36px; }
+.hero-side .lead { font-size: 17px; color: var(--white); max-width: 44ch; }
 .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; }
-@media (max-width: 860px) {
-  .hero-inner { grid-template-columns: 1fr; }
-}
 
 /* ---------- Challenges ---------- */
 .cards-4 { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
@@ -202,28 +204,59 @@ html.js:not([data-intro="done"]) .header-nav, html.js:not([data-intro="done"]) .
 .mwl { background: var(--navy); padding: var(--section-y) 0; }
 .mwl-head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px 48px; align-items: end; margin-bottom: clamp(28px, 3.4vw, 44px); }
 .mwl-head .side { display: grid; gap: 18px; justify-items: start; }
-.mwl-pairs { display: grid; gap: 0; border-top: 1px solid var(--white-12); }
-.mwl-labels { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); padding-bottom: 12px; font-family: var(--font-display); font-weight: 600; font-size: 14px; color: var(--white-70); }
-.mwl-pair { display: grid; grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr); align-items: start; padding: 22px 0; border-bottom: 1px solid var(--white-12); transition: background-color var(--dur-hover) var(--ease-kina); }
-.mwl-pair .arrow { width: 22px; height: 22px; margin-top: 4px; color: var(--green); transition: transform .5s var(--ease-out); }
-.mwl-pair:hover .arrow { transform: translateX(8px); }
-.mwl-pair h3 { margin-bottom: 6px; }
-.mwl-pair .more h3 { color: var(--green); }
-.mwl-pair p { color: var(--white-70); font-size: 15px; max-width: 46ch; }
-.pillars { margin-top: clamp(32px, 4vw, 52px); display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 20px 48px; align-items: start; }
-.pillars-tabs { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
-.pillars-tabs button { height: 40px; padding: 0 18px; border-radius: var(--r-pill); border: 1px solid var(--white-12); font-weight: 600; font-size: 14px; color: var(--white-70); transition: background-color var(--dur-hover) var(--ease-kina), color var(--dur-hover) var(--ease-kina), border-color var(--dur-hover) var(--ease-kina); }
-.pillars-tabs button:hover { color: var(--white); border-color: var(--white-70); }
-.pillars-tabs button[aria-selected="true"] { background: var(--green); border-color: var(--green); color: var(--navy); }
-.pillars-panel { background: var(--white-12); border-radius: var(--r-card); padding: 24px 28px; min-height: 132px; }
-.pillars-panel .h3 { margin-bottom: 8px; }
-.pillars-panel p { color: var(--white-70); max-width: 60ch; }
-@media (max-width: 860px) { .mwl-head, .pillars { grid-template-columns: 1fr; } }
-@media (max-width: 620px) {
-  .mwl-labels { display: none; }
-  .mwl-pair { grid-template-columns: 1fr; gap: 10px; }
-  .mwl-pair .arrow { transform: rotate(90deg); margin: 0; }
-  .mwl-pair:hover .arrow { transform: rotate(90deg) translateX(4px); }
+/* Exchange stage: rolling words, photo wipe, progress tabs */
+.mwl-stage { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px clamp(32px, 5vw, 72px); align-items: stretch; }
+.mwl-copy { display: flex; flex-direction: column; justify-content: space-between; gap: 28px; padding-top: 8px; }
+.mwl-statement { font-family: var(--font-display); font-weight: 500; font-size: clamp(40px, 5.2vw, 76px); line-height: 1.04; letter-spacing: -.03em; }
+.mwl-row { display: flex; align-items: baseline; gap: .26em; white-space: nowrap; }
+.mwl-row.is-more { color: var(--green); }
+.roll { display: inline-block; height: 1.08em; overflow: hidden; vertical-align: bottom; transition: width .8s var(--ease-out); }
+.roll-track { display: flex; flex-direction: column; align-items: flex-start; transition: transform .9s var(--ease-out); }
+.roll-track > span { display: block; height: 1.08em; line-height: 1.08; }
+.mwl-row.is-more .roll-track { transition-delay: .08s; }
+.mwl-detail { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-top: 22px; border-top: 1px solid var(--white-12); animation: mwl-in .7s var(--ease-out) both; }
+.mwl-detail p { color: var(--white-70); font-size: 15px; max-width: 40ch; }
+.mwl-detail strong { display: block; color: var(--white); font-family: var(--font-display); font-weight: 600; font-size: 17px; margin-bottom: 6px; }
+.mwl-detail p + p strong { color: var(--green); }
+@keyframes mwl-in { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+.mwl-tabs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mwl-tabs button { display: grid; gap: 12px; text-align: left; font-weight: 600; font-size: 14px; color: var(--white-70); padding-top: 4px; transition: color var(--dur-hover) var(--ease-kina); }
+.mwl-tabs button span { display: inline-flex; align-items: center; gap: 6px; }
+.mwl-tabs button svg { width: 11px; height: 11px; color: var(--green); }
+.mwl-tabs button:hover, .mwl-tabs button[aria-selected="true"] { color: var(--white); }
+.mwl-tabs i { position: relative; display: block; height: 3px; border-radius: 3px; background: var(--white-12); overflow: hidden; }
+.mwl-tabs i::after { content: ""; position: absolute; inset: 0; background: var(--green); transform: scaleX(0); transform-origin: left; }
+.mwl-tabs button[aria-selected="true"] i::after { transform: scaleX(1); }
+.mwl-stage.is-running .mwl-tabs button[aria-selected="true"] i::after { animation: mwl-progress linear both; }
+@keyframes mwl-progress { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+.mwl-photos { position: relative; min-height: 380px; border-radius: var(--r-card); background: var(--white-12); }
+.mwl-photo { position: absolute; inset: 0; clip-path: inset(100% 0 0 0); transition: clip-path 1s var(--ease-out); }
+.mwl-photo img { width: 100%; height: 100%; object-fit: cover; transform: scale(1.1); transition: transform 1.6s var(--ease-out); }
+.mwl-photo.is-active { clip-path: inset(0 0 0 0); z-index: 1; }
+.mwl-photo.is-active img { transform: scale(1); }
+
+/* Pillars: a horizontal accordion; the active pillar widens and its text rises in */
+.pillars { margin-top: clamp(36px, 4.4vw, 56px); }
+.pillars > .h3 { margin-bottom: 18px; }
+.pillars-row { display: flex; gap: 10px; height: 176px; }
+.pillar { flex: 1 1 0; min-width: 0; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; gap: 10px; text-align: left; padding: 22px; border-radius: var(--r-card); background: var(--white-12); color: var(--white); transition: flex-grow .8s var(--ease-out), background-color .5s var(--ease-kina), color .5s var(--ease-kina); }
+.pillar:hover { background: rgb(255 255 255 / .2); }
+.pillar.is-active { flex-grow: 3.2; background: var(--green); color: var(--navy); }
+.pillar-title { font-family: var(--font-display); font-weight: 600; font-size: 20px; letter-spacing: -.01em; }
+.pillar-text { font-size: 15px; line-height: 1.5; max-width: 46ch; opacity: 0; transform: translateY(12px); max-height: 0; transition: opacity .35s var(--ease-kina), transform .5s var(--ease-out); }
+.pillar.is-active .pillar-text { opacity: 1; transform: none; max-height: 120px; transition-delay: .25s; }
+@media (max-width: 900px) {
+  .mwl-head, .mwl-stage { grid-template-columns: 1fr; }
+  .mwl-photos { min-height: 0; aspect-ratio: 4 / 3; order: -1; }
+  .pillars-row { flex-direction: column; height: auto; }
+  .pillar { flex: none; padding: 16px 18px; }
+  .pillar.is-active .pillar-text { max-height: 200px; }
+}
+@media (max-width: 560px) {
+  .mwl-detail { grid-template-columns: 1fr; gap: 14px; }
+  .mwl-tabs { gap: 8px; }
+  .mwl-tabs button { font-size: 12px; }
+  .mwl-tabs button span { flex-wrap: wrap; }
 }
 
 /* ---------- Processes + MyAcopia (hunar.ai style gradient band, palette only) ---------- */

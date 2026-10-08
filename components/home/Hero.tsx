@@ -1,6 +1,7 @@
 "use client";
 
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Arrow, Ext, reducedMotion } from "@/components/ui";
@@ -26,7 +27,10 @@ export default function Hero() {
       .to(side, { opacity: 1, y: 0, duration: .8, ease: "expo.out", stagger: .07, clearProps: "transform" }, .45);
     if (document.documentElement.dataset.intro === "done") play();
     else document.addEventListener("intro:done", play, { once: true });
-    return () => { document.removeEventListener("intro:done", play); gsap.killTweensOf([img, lines, side]); };
+    // As the hero scrolls away the photo drifts down slightly behind its frame (the hero is the one place a scrub is allowed).
+    gsap.registerPlugin(ScrollTrigger);
+    const drift = gsap.fromTo(img, { yPercent: 0 }, { yPercent: 9, ease: "none", scrollTrigger: { trigger: el, start: "top top", end: "bottom top", scrub: true } });
+    return () => { document.removeEventListener("intro:done", play); gsap.killTweensOf([img, lines, side]); drift.scrollTrigger?.kill(); drift.kill(); };
   }, []);
 
   return (

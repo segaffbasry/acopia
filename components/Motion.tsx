@@ -61,6 +61,15 @@ export default function Motion() {
       ScrollTrigger.batch('[data-reveal="card"]', { start: "top 92%", once: true,
         onEnter: (batch) => gsap.fromTo(batch, { opacity: 0, y: 28 }, { opacity: 1, y: 0, duration: .9 * pace(batch[0]), ease, stagger: .08, clearProps: "transform" }) });
 
+      // Figures count up from zero once, in step with their card (Trusted facts).
+      all("[data-count]").forEach((el) => {
+        const target = Number(el.dataset.count), suffix = el.dataset.suffix ?? "", n = { v: 0 };
+        const fmt = (v: number) => Math.round(v).toLocaleString("en-GB") + suffix;
+        el.textContent = fmt(0);
+        gsap.to(n, { v: target, duration: 1.6, ease: "expo.out", onUpdate: () => { el.textContent = fmt(n.v); },
+          scrollTrigger: { trigger: el, start: "top 92%", once: true } });
+      });
+
       // 5. Images: the frame clips open from below, and the photo inside drifts about 10% against the scroll.
       all('[data-reveal="image"]').forEach((el) => {
         gsap.to(el, { clipPath: "inset(0% 0 0 0 round 16px)", duration: 1.1 * pace(el), ease, clearProps: "clipPath",
@@ -87,6 +96,9 @@ export default function Motion() {
         if (r.top <= probe && r.bottom >= probe) tone = s.dataset.tone ?? tone;
       });
       header.dataset.tone = tone;
+      // Past the hero photo the header sits on a solid bar so it never collides with text (client feedback, 8 Oct).
+      const hero = document.querySelector(".hero-card");
+      header.classList.toggle("is-solid", !!hero && hero.getBoundingClientRect().bottom < header.offsetHeight);
       const menuOpen = document.documentElement.classList.contains("menu-open");
       header.classList.toggle("is-hidden", !menuOpen && y > 160 && y > lastY + 2);
       if (y < lastY - 2 || y <= 160) header.classList.remove("is-hidden");

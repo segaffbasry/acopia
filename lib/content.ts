@@ -13,8 +13,9 @@ export const hero = {
   lead: "Helping multi-site retailers gain control of operational consumables, reducing cost, complexity and waste across every store.",
   primary: { label: "Speak to a Retail Specialist", href: `${SITE}/contact/` },
   secondary: { label: "See Your Maturity Score", href: "https://lp.acopia.co.uk/retail-consumables-maturity-assessment" },
-  // Image from the live Resources article "Busy store" feature (wp-content/uploads/2026/08/Busy-Store-webp.webp).
-  image: { src: "/media/Busy-Store-webp.webp", alt: "A busy multi-site retail store floor with shoppers between the rails", w: 1536, h: 1024 },
+  // Acopia's own photography (wp-content/uploads/2025/07/Re-Thinking-Retail-Bag-scaled.webp): a shopper on the high
+  // street carrying the Acopia "re-thinking retail" tote. Replaces the busy store floor (client feedback, 8 Oct).
+  image: { src: "/media/Re-Thinking-Retail-Bag-scaled.webp", alt: "A shopper outside a high street store carrying an Acopia re-thinking retail tote bag", w: 2560, h: 1707 },
 };
 
 export type Challenge = { title: string; text: string; href: string; image: Img };
@@ -65,6 +66,12 @@ export const moreWithLess = {
     { title: "Less Complexity", text: "Simplify suppliers, products and processes across your store network." },
     { title: "Less Waste", text: "Reduce unnecessary packaging, stockholding and wasted store time." },
   ] as Benefit[],
+  // One real photo per less-to-more pair, from the live Resources articles.
+  pairImages: [
+    { src: "/media/Out-of-stock-webp.webp", alt: "A tidy back-of-house stockroom with labelled shelves and a stock check board", w: 1536, h: 1024 },
+    { src: "/media/Retail-Hidden-Costs.webp", alt: "A calm, well merchandised store with clear shelf signage", w: 1536, h: 1024 },
+    { src: "/media/Sustainable-Shopping-Bags.webp", alt: "A shopper on the high street carrying paper carrier bags", w: 1402, h: 1122 },
+  ] as Img[],
   more: [
     { title: "More Time", text: "Free store teams to focus on customers and running great stores." },
     { title: "More Clarity", text: "Clear visibility of what is being purchased, used and spent across every store." },

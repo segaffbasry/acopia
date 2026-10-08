@@ -35,17 +35,17 @@ Desktop target is 6 to 8 viewport heights. Heights are measured by `scripts/shot
 
 | Width | Page height | Viewports |
 | --- | --- | --- |
-| 1440 | 7,179px | 8.0 |
-| 768 | 9,009px | 8.8 |
-| 375 | 9,474px | 11.7 (card rows swipe sideways on phones) |
+| 1440 | 7,222px | 8.0 |
+| 768 | 9,711px | 9.5 |
+| 375 | 9,635px | 11.9 (card rows swipe sideways on phones) |
 
 | Section | Live homepage | This build | Notes |
 | --- | --- | --- | --- |
-| Hero | title, subtitle, line, no CTA | same copy + 2 CTAs | CTAs are the live "Speak to a Retail Specialist" and "See Your Maturity Score" |
+| Hero | title, subtitle, line, no CTA | same copy + 2 CTAs | CTAs are the live "Speak to a Retail Specialist" and "See Your Maturity Score". Photo: Acopia's own tote bag shot |
 | Challenges | 4 | 4 | "Resiliance" typo corrected to the menu's "Resilience" |
 | Statement + pain points | 1 + 4 | 1 + 4 | |
 | Maturity Index | 1 | 1 | Beside the statement instead of a separate band |
-| More with Less | 6 tiles | 6 (as 3 less-to-more pairs) + 5 pillars | Pillars are from `/about/more-with-less/` |
+| More with Less | 6 tiles | 6 (as 3 cycling less-to-more pairs with photos) + 5 pillars | Pillars are from `/about/more-with-less/` |
 | Processes | 3 | 3 + MyAcopia band (4 facts) | Facts are from `/retail/processes/myacopia/` |
 | Trusted | copy + 12 logos | copy + 12 logos + 3 facts + 11-step timeline | Facts and timeline are from `/about/who-we-are/` (1995, 1996 and 2000 merged into one step) |
 | CTA | 1 | 1 | Over the live "Shop front" photo |
@@ -62,10 +62,17 @@ Nothing on the live homepage was cut. The only gap: the live site's HubSpot form
   3. The wordmark then flies into the header logo position and turns white as it lands on the hero photo, while the white ground fades away.
 
   It runs on one GSAP timeline: build 0.1 to 0.85s, hold, exit 1.15 to 1.85s. Handover happens at the start of the exit: it removes `is-loading`, sets `data-intro="done"` and dispatches `intro:done`, so the hero entrance overlaps the exit. Lenis stays stopped until then, and a 2.2s guard means it can never block the page. It plays on every load. Reduced motion skips it, and `<noscript>` hides it.
-- **Hero** (`components/home/Hero.tsx`): Kina's inset photo card. The headline sits bottom left on two lines (the second in brand green), with the line and actions beside it. On `intro:done` the photo settles from 1.08 scale and the headline lines rise out of their masks.
+- **Hero** (`components/home/Hero.tsx`): Kina's inset photo card using Acopia's own "re-thinking retail" tote photo (round 1 feedback: the busy store floor was too busy). The headline, line and actions sit bottom left so the tote stays clear. On `intro:done` the photo settles from 1.08 scale and the headline lines rise out of their masks. As the hero scrolls away, the photo drifts 9% behind its frame (the only scrubbed motion besides image parallax).
 - **Smooth scroll** (`components/Motion.tsx`, `lib/scroll.ts`): Lenis (`lerp .12`) runs on the GSAP ticker and is synced with ScrollTrigger. Anchors go through Lenis. The menu and the preloader stop it. `overscroll-behavior-y: none` is set.
 - **Backgrounds:** every section has a fixed ground (white, with navy panels and a blue to navy band), and nothing recolours on scroll. Hunar does not recolour either, and clients have rejected colour jumps.
-- **Header** (`components/Header.tsx`): frameless. Its colour follows the section under it (`data-tone`). It hides on scroll down and returns on scroll up.
+- **Header** (`components/Header.tsx`): frameless over the hero. Once it leaves the hero it sits on a solid floating bar, inset 8px like the page's cards: white over light sections, navy over navy panels, and no blur. This came from round 1 feedback: "header can't be seen over text". Its colour follows the section under it (`data-tone`). It hides on scroll down and returns on scroll up.
+- **More with Less** (`components/home/MoreWithLess.tsx`): round 1 feedback asked for more movement. The six live tiles become three exchanges (Less Admin / More Time, and so on):
+  - The two words roll vertically into place.
+  - A real photo for each pair wipes up into the frame.
+  - Hunar-style progress bars fill under the pair tabs.
+
+  It cycles every 5.2s only while on screen, pauses on hover or focus, and never cycles with reduced motion. The five pillars follow as a horizontal accordion: the active pillar widens to green and its text rises in.
+- **Figures** in Trusted (50,000 and 5,000+) count up once when they come into view.
 - **Menu:** a full-screen navy sheet. One GSAP timeline wipes it down and raises the groups, and closing reverses it. It traps focus, Esc closes it, and focus returns to the Menu button. Anchor items scroll the homepage; the rest point at live URLs, including the six product brands.
 - **Copied interaction: Kina's ticker** (`components/Ticker.tsx`), measured on kina.co:
   - a 59px pill with a 100px radius;
@@ -101,7 +108,9 @@ All moves use `expo.out`, play once, and run 25% shorter inside `data-late` sect
 
 All images are from `acopia.co.uk/wp-content/uploads`, downloaded by `scripts/media.sh`:
 
-- **Hero and CTA:** Resources article photos (`Busy-Store`, `Shop-front`).
+- **Hero:** `Re-Thinking-Retail-Bag-scaled`.
+- **CTA:** the Resources "Shop front" photo.
+- **More with Less pairs:** Resources article photos (`Out-of-stock`, `Retail-Hidden-Costs`, `Sustainable-Shopping-Bags`).
 - **Challenge and process cards:** the live homepage.
 - **Building photo:** Who We Are.
 - **Maturity Index screenshot:** the homepage.
